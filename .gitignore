@@ -1,0 +1,9 @@
+build/
+WebContent/image/
+WebContent/META-INF/
+WebContent/resources
+WebContent/WEB-INF/
+.classpath/
+.metadata/
+.project/
+.settings/
