@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html">
+	
+<h:head>
+	<title>JSF JDBC Integration</title>
+</h:head>
+
+<h:body>
+	<h:button outcome="add_country.xhtml" value="Add Country"></h:button>
+	<h2>Country Details</h2>
+	<h:dataTable value="#{countryManager.all}" var="country" border="2">
+		<h:column>
+			<f:facet name="header">Country Code</f:facet>
+         #{country.code}
+      </h:column>
+      <h:column>
+			<f:facet name="header">Country Name</f:facet>
+         #{country.name}
+      </h:column>
+      <h:column>
+			<f:facet name="header">Country Details</f:facet>
+         #{country.details}
+      </h:column>
+      <h:column>
+      	
+     <h:link value="Update" outcome="update_country"/>
+     <br/>
+     <h:link value="Delete"/>
+
+      </h:column>
+	</h:dataTable>
+</h:body>
+</html>
