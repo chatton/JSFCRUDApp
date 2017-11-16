@@ -1,10 +1,13 @@
 package beans;
 
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 
 @ManagedBean(name="country")
 public class Country {
-	private String code;
+	
+
+	private String code;	
 	private String name;
 	private String details;
 	

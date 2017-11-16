@@ -9,12 +9,12 @@
 </h:head>
 <h:body>
 	<h2>Country Details</h2>
-	<h1>"#{country.name}"</h1>
-	<h:form>
-	    Country Code: <h:inputText value="#{country.code}"/> 
-	    Country Name: <h:inputText value="#{country.name}"/> 
-		Country Details: <h:inputText value="#{country.details}"/> 
-	    <h:commandButton value="Add" action="#{countryManager.update(country)}"></h:commandButton>
+	<h1>"#{code}"</h1>
+	<h:form value="{countryManager.getByCode(code))}" var="country">
+	    Country Code: <h:inputText value="#{c.code}"/> 
+	    Country Name: <h:inputText value="#{c.name}"/> 
+		Country Details: <h:inputText value="#{c.details}"/> 
+	    <h:commandButton value="Add" action="#{countryManager.update(c)}"></h:commandButton>
 	</h:form>
 	
 	<h:link value="back" outcome="countries"/>
