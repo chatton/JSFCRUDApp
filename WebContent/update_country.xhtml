@@ -2,22 +2,34 @@
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html">
-	
+
 <h:head>
 	<title>Update country</title>
-
 </h:head>
+
 <h:body>
 	<h2>Country Details</h2>
-	<h1>"#{code}"</h1>
-	<h:form value="{countryManager.getByCode(code))}" var="country">
-	    Country Code: <h:inputText value="#{c.code}"/> 
-	    Country Name: <h:inputText value="#{c.name}"/> 
-		Country Details: <h:inputText value="#{c.details}"/> 
-	    <h:commandButton value="Add" action="#{countryManager.update(c)}"></h:commandButton>
+	<h:form>
+	    Country Code: <h:inputText readonly="true"
+			value="#{countryController.selected.code}" />
+		<br />
+		<br />
+	    Country Name: <h:inputText
+			value="#{countryController.selected.name}" />
+		<br />
+		<br />
+		Country Details: <h:inputText
+			value="#{countryController.selected.details}" />
+		<br />
+		<br />
+		<h:commandButton value="Update"
+			action="#{countryController.executeUpdate()}"></h:commandButton>
+		<br />
+		<br />
+		<h:link value="back" outcome="countries" />
 	</h:form>
-	
-	<h:link value="back" outcome="countries"/>
-	
+
+
+
 </h:body>
 </html>

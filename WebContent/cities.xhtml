@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html">
+
+<h:head>
+	<title>Regions</title>
+</h:head>
+
+<h:body>
+	<h:button outcome="add_city.xhtml" value="Add City"></h:button>
+	<h:dataTable value="#{cityController.all}" var="city" border="2">
+		<h:column>
+			<f:facet name="header">City Code</f:facet>
+         #{city.cityCode}
+      </h:column>
+		<h:column>
+			<f:facet name="header">Country Code</f:facet>
+         #{city.countryCode}
+      </h:column>
+		<h:column>
+			<f:facet name="header">Region Code</f:facet>
+         #{city.regCode}
+      </h:column>
+		<h:column>
+			<f:facet name="header">City Name</f:facet>
+         #{city.name}
+      </h:column>
+      		<h:column>
+			<f:facet name="header">Population</f:facet>
+         #{city.population}
+      </h:column>
+      		<h:column>
+			<f:facet name="header">By the Sea</f:facet>
+         #{city.isCoastal}
+      </h:column>
+      		<h:column>
+			<f:facet name="header">Area</f:facet>
+         #{city.areaKm}
+      </h:column>
+	</h:dataTable>
+	<h:link value="home" outcome="index"/>
+</h:body>
+</html>

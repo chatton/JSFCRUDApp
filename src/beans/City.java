@@ -1,6 +1,8 @@
 package beans;
 
+import javax.faces.bean.ManagedBean;
 
+@ManagedBean
 public class City {
 
 	private String cityCode;
@@ -53,11 +55,11 @@ public class City {
 		this.population = population;
 	}
 
-	public boolean isCoastal() {
+	public boolean getIsCoastal() {
 		return isCoastal;
 	}
 
-	public void setCoastal(boolean isCoastal) {
+	public void setIsCoastal(boolean isCoastal) {
 		this.isCoastal = isCoastal;
 	}
 

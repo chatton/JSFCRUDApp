@@ -10,8 +10,7 @@ public class Region {
 	private String name;
 	private String description;
 
-	public Region() {
-	}
+	public Region() {}
 
 	public String getCountryCode() {
 		return countryCode;

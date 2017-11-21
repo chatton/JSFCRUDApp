@@ -11,7 +11,9 @@ import beans.Country;
 
 public class CountryDBInterface {
 
-	public List<Country> getAllCountries(Connection connection) throws SQLException {
+	private List<Country> allCountries = new ArrayList<>();
+	
+	public List<Country> loadAll(Connection connection) throws SQLException{
 		Statement stmt = connection.createStatement();
 		String queryString = "SELECT * FROM COUNTRY";
 		ResultSet rs = stmt.executeQuery(queryString);
@@ -24,7 +26,12 @@ public class CountryDBInterface {
 			country.setDetails(rs.getString("co_details"));
 			countries.add(country);
 		}
+		allCountries = countries;
 		return countries;
+	}
+	
+	public List<Country> getAllCountries() {
+		return new ArrayList<>(allCountries);
 	}
 
 	public String add(Country country, Connection connection) throws SQLException {
@@ -33,5 +40,14 @@ public class CountryDBInterface {
 				country.getName(), country.getDetails()));
 
 		return "countries"; // navigate to countries page on success
+	}
+
+	public String executeUpdate(Country country, Connection connection) throws SQLException{
+		System.out.println(country.getName());
+		Statement stmt = connection.createStatement();
+		stmt.executeUpdate(String.format("UPDATE COUNTRY SET co_name=\"%s\", co_details=\"%s\" WHERE co_code=\"%s\"", 
+				country.getName(), country.getDetails(), country.getCode()));
+		
+		return "countries";
 	}
 }
