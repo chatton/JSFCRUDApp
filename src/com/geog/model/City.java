@@ -1,4 +1,4 @@
-package beans;
+package com.geog.model;
 
 import javax.faces.bean.ManagedBean;
 

@@ -1,4 +1,4 @@
-package controllers;
+package com.geog.controller;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -7,8 +7,8 @@ import java.util.List;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 
-import beans.Region;
-import dao.MySQLDao;
+import com.geog.dao.MySQLDao;
+import com.geog.model.Region;
 
 @ApplicationScoped
 @ManagedBean

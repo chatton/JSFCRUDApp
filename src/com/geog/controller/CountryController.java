@@ -1,15 +1,16 @@
-package controllers;
+package com.geog.controller;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.context.FacesContext;
 
-import beans.Country;
-import dao.MySQLDao;
-import dao.dbinterfaces.CountryDBInterface;
+import com.geog.dao.MySQLDao;
+import com.geog.model.Country;
 
 @ApplicationScoped
 @ManagedBean
@@ -41,12 +42,26 @@ public class CountryController {
 		return "update_country";
 	}
 
+	public String delete(Country country) {
+
+		try {
+			return db.deleteCountry(country);
+		} catch (SQLException e) {
+			System.out.println("Failed with: " + e.getMessage());
+			return null;
+		}
+
+	}
+
 	public String executeUpdate() {
 		boolean validName = !selected.getName().trim().isEmpty();
+
 		if (!validName) {
-			
+			// don't perform any db operations with an invalid name.
+			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Name must not be empty."));
 			return "update_country";
 		}
+
 		try {
 			return db.executeUpdate(selected);
 		} catch (SQLException e) {
