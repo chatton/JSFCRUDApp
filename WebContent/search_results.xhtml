@@ -3,17 +3,15 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html">
 
+
+
 <h:head>
-	<title>Cities</title>
+	<title>Regions</title>
 </h:head>
 
 <h:body>
-	<h:button outcome="add_city.xhtml" value="Add City"></h:button>
-	<h:dataTable value="#{cityController.cities}" var="city" border="2">
-		<f:metadata>
-			<f:event type="preRenderView"
-				listener="#{cityController.loadCities()}" />
-		</f:metadata>
+	<h:dataTable value="#{cityController.searchResults()}" var="city"
+		border="2">
 		<h:column>
 			<f:facet name="header">City Code</f:facet>
          #{city.code}
@@ -42,12 +40,6 @@
 			<f:facet name="header">Area</f:facet>
          #{city.areaKm}
       </h:column>
-		<h:column>
-			<h:form>
-				<h:commandLink value="All Details"
-					action="#{cityController.getDetailsFor(city)}" />
-			</h:form>
-		</h:column>
 	</h:dataTable>
 	<h:link value="home" outcome="index" />
 </h:body>

@@ -11,35 +11,40 @@ import javax.faces.context.FacesContext;
 
 import com.geog.dao.MySQLDao;
 import com.geog.model.Country;
+import com.geog.util.Pages;
+
+import static com.geog.util.Messages.addMessage;
+import static com.geog.util.Messages.addGlobalMessage;
 
 @ApplicationScoped
 @ManagedBean
 public class CountryController {
 
+	// select * from city where population > 5000 and co_code = "USA" and
+	// isCoastal=true;
 	private final MySQLDao db;
-	private List<Country> all;
+	private List<Country> countries;
 	private Country selected;
 
 	public CountryController() {
 		db = new MySQLDao();
-		all = new ArrayList<>();
+		countries = new ArrayList<>();
 		selected = new Country();
 	}
 
-	public List<Country> loadAll() {
+	public void loadCountries() {
 		try {
-			List<Country> countriesFromDb = db.loadAllCountries();
-			all = countriesFromDb;
-			return countriesFromDb;
+			countries = db.loadAllCountries();
 		} catch (SQLException e) {
 			e.printStackTrace();
-			return null;
+
+			countries = new ArrayList<>();
 		}
 	}
 
 	public String update(Country country) {
 		selected = country;
-		return "update_country";
+		return Pages.UPDATE_COUNTRY;
 	}
 
 	public String delete(Country country) {
@@ -47,34 +52,64 @@ public class CountryController {
 		try {
 			return db.deleteCountry(country);
 		} catch (SQLException e) {
-			System.out.println("Failed with: " + e.getMessage());
 			return null;
 		}
 
 	}
 
 	public String executeUpdate() {
-		boolean validName = !selected.getName().trim().isEmpty();
-
-		if (!validName) {
+		if (!hasValidName(selected)) {
 			// don't perform any db operations with an invalid name.
-			FacesContext.getCurrentInstance().addMessage(null, new FacesMessage("Name must not be empty."));
-			return "update_country";
+			addGlobalMessage("Name must not be empty.");
+			return Pages.UPDATE_COUNTRY;
 		}
 
 		try {
 			return db.executeUpdate(selected);
 		} catch (SQLException e) {
-			return "update_country";
+			return Pages.UPDATE_COUNTRY;
 		}
 
 	}
 
+	private boolean hasUniqueCode(Country country) {
+		return countries.stream().noneMatch(c -> c.getCode().equals(country.getCode()));
+	}
+
+	private boolean hasValidName(Country country) {
+		return !country.getName().trim().isEmpty();
+	}
+
+	private boolean hasValidCode(Country country) {
+		final int length = country.getCode().trim().length();
+		final boolean hasCorrectLength = length > 0 && length <= 3;
+		return hasCorrectLength;
+	}
+
 	public String add(Country country) {
+		final boolean validName = hasValidName(country);
+		if (!validName) {
+			addMessage("countryform:noName", "Name is mandatory. And must be < 4 characters");
+		}
+
+		final boolean validCode = hasValidCode(country);
+		if (!validCode) {
+			addMessage("countryform:noCode", "Code is mandatory And must be < 4 characters");
+		}
+
+		if (!validName || !validCode) {
+			return Pages.ADD_COUNTRY;
+		}
+
+		if (!hasUniqueCode(country)) {
+			addGlobalMessage("ERROR: Country Code: " + country.getCode() + " already exists.");
+			return Pages.ADD_COUNTRY; // stay on add country page.
+		}
+
 		try {
 			return db.addCountry(country);
 		} catch (SQLException e) {
-			return "add_country"; // stay on add country page.
+			return Pages.ADD_COUNTRY;
 		}
 	}
 
@@ -86,12 +121,8 @@ public class CountryController {
 		this.selected = selected;
 	}
 
-	// public List<Country> getAll() {
-	// try {
-	// return db.getAllCountries();
-	// } catch (SQLException e) {
-	// // h:message SQLCommunicationException
-	// }
-	// return null;
-	// }
+	public List<Country> getCountries() {
+		return countries;
+	}
+
 }

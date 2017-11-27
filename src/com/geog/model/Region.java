@@ -10,14 +10,15 @@ public class Region {
 	private String name;
 	private String description;
 
-	public Region() {}
+	public Region() {
+	}
 
 	public String getCountryCode() {
 		return countryCode;
 	}
 
 	public void setCountryCode(String countryCode) {
-		this.countryCode = countryCode;
+		this.countryCode = countryCode.trim();
 	}
 
 	public String getCode() {
@@ -25,7 +26,7 @@ public class Region {
 	}
 
 	public void setCode(String code) {
-		this.code = code;
+		this.code = code.trim();
 	}
 
 	public String getName() {
@@ -33,7 +34,7 @@ public class Region {
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		this.name = name.trim();
 	}
 
 	public String getDescription() {
@@ -41,7 +42,7 @@ public class Region {
 	}
 
 	public void setDescription(String description) {
-		this.description = description;
+		this.description = description.trim();
 	}
 
 }

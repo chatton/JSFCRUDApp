@@ -3,19 +3,30 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html">
 
+
+
 <h:head>
 	<title>Regions</title>
 </h:head>
 
 <h:body>
 	<h:button outcome="add_region.xhtml" value="Add Region"></h:button>
-	<h:dataTable value="#{regionController.all}" var="region" border="2">
+	<h:dataTable value="#{regionController.regions}" var="region"
+		border="2">
+		<f:metadata>
+			<f:event type="preRenderView"
+				listener="#{regionController.loadRegions()}" />
+		</f:metadata>
 		<h:column>
 			<f:facet name="header">Country Code</f:facet>
          #{region.countryCode}
       </h:column>
 		<h:column>
 			<f:facet name="header">Region Code</f:facet>
+         #{region.code}
+      </h:column>
+      	<h:column>
+			<f:facet name="header">Region Name</f:facet>
          #{region.name}
       </h:column>
 		<h:column>
@@ -23,6 +34,6 @@
          #{region.description}
       </h:column>
 	</h:dataTable>
-	<h:link value="home" outcome="index"/>
+	<h:link value="home" outcome="index" />
 </h:body>
 </html>

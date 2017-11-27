@@ -8,9 +8,15 @@
 </h:head>
 
 <h:body>
+	
 	<h:button outcome="add_country.xhtml" value="Add Country"></h:button>
 	<h2>Country Details</h2>
-	<h:dataTable value="#{countryController.loadAll()}" var="country" border="2">
+	<h:dataTable value="#{countryController.countries}" var="country"
+		border="2">
+		<f:metadata>
+			<f:event type="preRenderView"
+				listener="#{countryController.loadCountries()}" />
+		</f:metadata>
 		<h:column>
 			<f:facet name="header">Country Code</f:facet>
          #{country.code}
@@ -25,7 +31,14 @@
       </h:column>
 		<h:column>
 			<h:form>
-				<h:commandLink value="Update" action="#{countryController.update(country)}"/>
+				<h:commandLink value="Update"
+					action="#{countryController.update(country)}" />
+
+			</h:form>
+			<h:form>
+				<h:commandLink value="Delete"
+					onclick="return confirm('Delete this country?')"
+					action="#{countryController.delete(country)}" />
 			</h:form>
 		</h:column>
 	</h:dataTable>

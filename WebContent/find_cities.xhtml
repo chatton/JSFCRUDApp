@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html">
+
+<h:head>
+	<title>Find All Cities</title>
+</h:head>
+
+<h:body>
+	<h:form>
+		<h1>Find All Cities</h1>
+		<br />
+	
+	Population: 
+	<h:selectOneMenu value="#{search.lessThanOrGreater}">
+			<f:selectItem itemValue="lt" itemLabel="Less Than" />
+			<f:selectItem itemValue="gt" itemLabel="Greater Than" />
+			<f:selectItem itemValue="e" itemLabel="Equal To" />
+		</h:selectOneMenu>
+		<h:inputText value="#{search.population}" />
+		<br />
+	Country Code <h:inputText value="#{search.countryCode}" />
+		<br />
+	By The Sea:
+		<h:selectOneMenu value="#{search.isCoastal}">
+			<f:selectItem itemValue="true" itemLabel="True" />
+			<f:selectItem itemValue="false" itemLabel="False" />
+		</h:selectOneMenu>
+		<br />
+		<h:commandButton value="Search" action="#{cityController.search(search)}" />
+		<br />
+	</h:form>
+	<h:link value="home" outcome="index" />
+</h:body>
+</html>

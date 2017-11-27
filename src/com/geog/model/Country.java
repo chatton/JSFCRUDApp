@@ -24,7 +24,7 @@ public class Country {
 	}
 
 	public void setCode(String code) {
-		this.code = code;
+		this.code = code.trim();
 	}
 
 	public String getName() {
@@ -32,7 +32,7 @@ public class Country {
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		this.name = name.trim();
 	}
 
 	public String getDetails() {
@@ -40,6 +40,6 @@ public class Country {
 	}
 
 	public void setDetails(String details) {
-		this.details = details;
+		this.details = details.trim();
 	}
 }

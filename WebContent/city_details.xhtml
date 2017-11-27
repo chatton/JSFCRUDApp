@@ -4,18 +4,25 @@
 	xmlns:h="http://java.sun.com/jsf/html">
 
 <h:head>
-	<title>Regions</title>
+	<title>City Details</title>
 </h:head>
 
 <h:body>
 	<h1>Full City Details</h1>
-	City Code: 
-	City Name:
-	Country: 
-	Region: 
-	City Population:
-	By The Sea:
-	Area (KM):
+	City Code: #{cityController.selected.code}
+	<br/>
+	City Name:#{cityController.selected.name}
+	<br/>
+	Country: #{cityController.selected.countryCode}
+	<br/>
+	Region: #{cityController.selected.regCode}
+	<br/>
+	City Population: #{cityController.selected.population}
+	<br/>
+	By The Sea: #{cityController.selected.isCoastal}
+	<br/>
+	Area (KM): #{cityController.selected.areaKm}
+	<br/>
 	<h:link value="home" outcome="index"/>
 	<h:link value="cities" outcome="cities"/>
 </h:body>

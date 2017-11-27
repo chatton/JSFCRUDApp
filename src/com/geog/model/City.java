@@ -5,7 +5,7 @@ import javax.faces.bean.ManagedBean;
 @ManagedBean
 public class City {
 
-	private String cityCode;
+	private String code;
 	private String countryCode;
 	private String regCode;
 	private String name;
@@ -15,12 +15,12 @@ public class City {
 	
 	public City() {}
 
-	public String getCityCode() {
-		return cityCode;
+	public String getCode() {
+		return code;
 	}
 
-	public void setCityCode(String cityCode) {
-		this.cityCode = cityCode;
+	public void setCode(String code) {
+		this.code = code;
 	}
 
 	public String getCountryCode() {

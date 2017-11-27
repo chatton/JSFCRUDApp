@@ -12,6 +12,7 @@ import java.util.List;
 import com.geog.model.City;
 import com.geog.model.Country;
 import com.geog.model.Region;
+import com.geog.util.Pages;
 
 public class MySQLDao {
 
@@ -21,19 +22,22 @@ public class MySQLDao {
 		connect();
 	}
 
+	public Connection getConnection() {
+		return connection;
+	}
+
 	public String addCountry(final Country country) throws SQLException {
 		final PreparedStatement stmt = connection.prepareStatement("INSERT INTO COUNTRY VALUES (?,?,?)");
 		stmt.setString(1, country.getCode());
 		stmt.setString(2, country.getName());
 		stmt.setString(3, country.getDetails());
 		stmt.executeUpdate();
-		
+
 		return "countries"; // navigate to countries page on success
 	}
 
 	// region methods
 
-	
 	public List<Region> getAllRegions() throws SQLException {
 		final Statement stmt = connection.createStatement();
 		final String queryString = "SELECT * FROM REGION";
@@ -61,8 +65,8 @@ public class MySQLDao {
 		final List<City> cities = new ArrayList<>();
 
 		while (rs.next()) {
-			City city = new City();
-			city.setCityCode(rs.getString("cty_code"));
+			final City city = new City();
+			city.setCode(rs.getString("cty_code"));
 			city.setAreaKm(rs.getDouble("areaKM"));
 			city.setIsCoastal(rs.getBoolean("isCoastal"));
 			city.setCountryCode(rs.getString("co_code"));
@@ -76,7 +80,7 @@ public class MySQLDao {
 
 	public String addCity(City city) throws SQLException {
 		PreparedStatement stmt = connection.prepareStatement("INSERT INTO CITY VALUES (?, ?, ?, ?, ?, ?, ?)");
-		stmt.setString(1, city.getCityCode());
+		stmt.setString(1, city.getCode());
 		stmt.setString(2, city.getCountryCode());
 		stmt.setString(3, city.getRegCode());
 		stmt.setString(4, city.getName());
@@ -84,8 +88,8 @@ public class MySQLDao {
 		stmt.setBoolean(6, city.getIsCoastal());
 		stmt.setDouble(7, city.getAreaKm());
 		stmt.execute();
-		System.out.println("ADDED!");
-		return "cities";
+
+		return Pages.CITIES;
 
 	}
 
@@ -100,8 +104,7 @@ public class MySQLDao {
 
 	public List<Country> loadAllCountries() throws SQLException {
 		final Statement stmt = connection.createStatement();
-		final String queryString = "SELECT * FROM COUNTRY";
-		final ResultSet rs = stmt.executeQuery(queryString);
+		final ResultSet rs = stmt.executeQuery("SELECT * FROM COUNTRY");
 
 		final List<Country> countries = new ArrayList<>();
 		while (rs.next()) {
@@ -115,21 +118,34 @@ public class MySQLDao {
 	}
 
 	public String executeUpdate(Country country) throws SQLException {
-		PreparedStatement stmt = connection.prepareStatement("UPDATE COUNTRY SET co_name=?, co_details=? WHERE co_code=?");
+		PreparedStatement stmt = connection
+				.prepareStatement("UPDATE COUNTRY SET co_name=?, co_details=? WHERE co_code=?");
+
 		stmt.setString(1, country.getName());
 		stmt.setString(2, country.getDetails());
 		stmt.setString(3, country.getCode());
 		stmt.executeUpdate();
-		return "countries";
+		return Pages.COUNTRIES;
 	}
 
 	public String deleteCountry(Country country) throws SQLException {
 		PreparedStatement stmt = connection.prepareStatement("DELETE FROM COUNTRY WHERE co_code=?");
 		stmt.setString(1, country.getCode());
-		
-		// TODO prompt here
-		
-		stmt.executeUpdate();
-		return "countries";
+		stmt.execute();
+		return Pages.COUNTRIES;
+	}
+
+	public String addRegion(Region region) throws SQLException {
+		// TODO Auto-generated method stub
+		String query = "INSERT INTO REGION VALUES (?, ?, ?, ?)";
+		PreparedStatement stmt = connection.prepareStatement(query);
+
+		stmt.setString(1, region.getCountryCode());
+		stmt.setString(2, region.getCode());
+		stmt.setString(3, region.getName());
+		stmt.setString(4, region.getDescription());
+
+		stmt.execute();
+		return Pages.REGIONS;
 	}
 }

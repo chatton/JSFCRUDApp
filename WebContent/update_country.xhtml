@@ -9,12 +9,14 @@
 
 <h:body>
 	<h2>Country Details</h2>
+	<h:messages globalOnly="true" styleClass="error" />
+
 	<h:form>
 	    Country Code: <h:inputText readonly="true"
 			value="#{countryController.selected.code}" />
 		<br />
 		<br />
-	    Country Name: <h:inputText
+	    Country Name: <h:inputText id="co_name"
 			value="#{countryController.selected.name}" />
 		<br />
 		<br />
