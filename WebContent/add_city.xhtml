@@ -6,28 +6,37 @@
 <h:head>
 	<title>Add City</title>
 </h:head>
-	
+
 <h:body>
-	<h2>City Details</h2>
-	<h:form>
-	    City Code: <h:inputText value="#{city.code}"/> 
-	    <br/>
-	    Country Code: <h:inputText value="#{city.countryCode}"/>
-	    <br/>
-	    Region Code: <h:inputText value="#{city.regCode}"/>
-	    <br/>
-	    Name: <h:inputText value="#{city.name}"/>
-	    <br/>
-	    Population: <h:inputText value="#{city.population}"/> 
-	    <br/>
-	    By the Sea: <h:inputText value="#{city.isCoastal}"/> 
-	    <br/>
-	    Area KM: <h:inputText value="#{city.areaKm}"/> 
-	    <br/>
-	    <h:commandButton value="Add" action="#{cityController.add(city)}"></h:commandButton>
+	<h:messages globalOnly="true" />
+	<h2>Add City</h2>
+	<h:form id="cityform">
+	    City Code: <h:inputText value="#{city.code}" />
+		<h:message class="error" for="noCityCode" id="noCityCode" />
+		<br />
+	    Country Code: <h:inputText value="#{city.countryCode}" />
+		<h:message class="error" for="noCountryCode" id="noCountryCode" />
+		<br />
+	    Region Code: <h:inputText value="#{city.regCode}" />
+		<h:message class="error" for="noRegCode" id="noRegCode" />
+		<br />
+	    Name: <h:inputText value="#{city.name}" />
+		<h:message class="error" for="noName" id="noName" />
+		<br />
+	    Population: <h:inputText value="#{city.population}" />
+		<br />
+	    By the Sea: <h:selectOneMenu>
+			<f:selectItem itemValue="true" itemLabel="True" />
+			<f:selectItem itemValue="false" itemLabel="False" />
+		</h:selectOneMenu>
+		<br />
+	    Area KM: <h:inputText value="#{city.areaKm}" />
+		<br />
+		<h:commandButton value="Add" action="#{cityController.add(city)}"></h:commandButton>
 	</h:form>
-	
-	<h:link value="back" outcome="cities"/>
-	
+	<h:link value="home" outcome="index" />
+	<br />
+	<h:link value="back" outcome="cities" />
+
 </h:body>
 </html>

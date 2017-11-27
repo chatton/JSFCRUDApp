@@ -85,7 +85,7 @@ public class MySQLDao {
 		stmt.setString(3, city.getRegCode());
 		stmt.setString(4, city.getName());
 		stmt.setLong(5, city.getPopulation());
-		stmt.setBoolean(6, city.getIsCoastal());
+		stmt.setString(6, city.getIsCoastal() ? "true" : "false");
 		stmt.setDouble(7, city.getAreaKm());
 		stmt.execute();
 

@@ -11,4 +11,6 @@ public class Pages {
 	public static final String COUNTRIES = "countries";
 	public static final String CITIES = "cities";
 	public static final String REGIONS = "regions";
+	public static final String SEARCH_RESULTS = "search_results";
+	public static final String ADD_CITY = "add_city";
 }

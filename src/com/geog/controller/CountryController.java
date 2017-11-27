@@ -4,10 +4,8 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.faces.application.FacesMessage;
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
-import javax.faces.context.FacesContext;
 
 import com.geog.dao.MySQLDao;
 import com.geog.model.Country;
@@ -15,6 +13,8 @@ import com.geog.util.Pages;
 
 import static com.geog.util.Messages.addMessage;
 import static com.geog.util.Messages.addGlobalMessage;
+import static com.geog.util.Util.anyFalse;
+import static com.geog.util.Util.codeIsValid;
 
 @ApplicationScoped
 @ManagedBean
@@ -58,7 +58,7 @@ public class CountryController {
 	}
 
 	public String executeUpdate() {
-		if (!hasValidName(selected)) {
+		if (!codeIsValid(selected.getName())) {
 			// don't perform any db operations with an invalid name.
 			addGlobalMessage("Name must not be empty.");
 			return Pages.UPDATE_COUNTRY;
@@ -76,28 +76,18 @@ public class CountryController {
 		return countries.stream().noneMatch(c -> c.getCode().equals(country.getCode()));
 	}
 
-	private boolean hasValidName(Country country) {
-		return !country.getName().trim().isEmpty();
-	}
-
-	private boolean hasValidCode(Country country) {
-		final int length = country.getCode().trim().length();
-		final boolean hasCorrectLength = length > 0 && length <= 3;
-		return hasCorrectLength;
-	}
-
 	public String add(Country country) {
-		final boolean validName = hasValidName(country);
+		final boolean validName = codeIsValid(country.getName(), 4);
 		if (!validName) {
 			addMessage("countryform:noName", "Name is mandatory. And must be < 4 characters");
 		}
 
-		final boolean validCode = hasValidCode(country);
+		final boolean validCode = codeIsValid(country.getCode(), 4);
 		if (!validCode) {
 			addMessage("countryform:noCode", "Code is mandatory And must be < 4 characters");
 		}
 
-		if (!validName || !validCode) {
+		if (anyFalse(validName, validCode)) {
 			return Pages.ADD_COUNTRY;
 		}
 

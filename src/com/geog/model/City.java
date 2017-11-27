@@ -20,7 +20,7 @@ public class City {
 	}
 
 	public void setCode(String code) {
-		this.code = code;
+		this.code = code.trim();
 	}
 
 	public String getCountryCode() {
@@ -28,7 +28,7 @@ public class City {
 	}
 
 	public void setCountryCode(String countryCode) {
-		this.countryCode = countryCode;
+		this.countryCode = countryCode.trim();
 	}
 
 	public String getRegCode() {
@@ -36,7 +36,7 @@ public class City {
 	}
 
 	public void setRegCode(String regCode) {
-		this.regCode = regCode;
+		this.regCode = regCode.trim();
 	}
 
 	public String getName() {
@@ -44,7 +44,7 @@ public class City {
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		this.name = name.trim();
 	}
 
 	public long getPopulation() {

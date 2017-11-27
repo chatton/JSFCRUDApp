@@ -1,18 +1,24 @@
 package com.geog.controller;
 
 import java.sql.SQLException;
+import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
-import javax.sound.midi.Soundbank;
 
 import com.geog.dao.MySQLDao;
 import com.geog.finders.CityFinder;
 import com.geog.finders.DatabaseException;
 import com.geog.model.City;
 import com.geog.model.SearchQueryOptions;
+import com.geog.util.Pages;
+
+import static com.geog.util.Messages.addMessage;
+import static com.geog.util.Messages.addGlobalMessage;
+import static com.geog.util.Util.anyFalse;
+import static com.geog.util.Util.codeIsValid;
 
 @ApplicationScoped
 @ManagedBean
@@ -54,18 +60,46 @@ public class CityController {
 	}
 
 	public String add(City city) {
+		final boolean isValidCityCode = codeIsValid(city.getCode(), 4);
+		if (!isValidCityCode) {
+			addMessage("cityform:noCityCode", "City code is mandatory and must be < 4 characters.");
+		}
+
+		final boolean isValidCountryCode = codeIsValid(city.getCountryCode(), 4);
+		if (!isValidCountryCode) {
+			addMessage("cityform:noCountryCode", "Country code is mandatory and must be < 4 characters.");
+		}
+
+		final boolean isValidRegionCode = codeIsValid(city.getRegCode(), 4);
+		if (!isValidRegionCode) {
+			addMessage("cityform:noRegCode", "Region code is mandatory and must be < 4 characters.");
+		}
+
+		final boolean isValidCityName = codeIsValid(city.getName());
+		if (!isValidCityName) {
+			addMessage("cityform:noName", "City name is mandatory.");
+		}
+
+		if (anyFalse(isValidCityCode, isValidCountryCode, isValidRegionCode, isValidCityName)) {
+			return Pages.ADD_CITY;
+		}
+
 		try {
 			return db.addCity(city);
+		} catch (SQLIntegrityConstraintViolationException e) {
+			addGlobalMessage(String.format("ERROR attempting to add City: %s, Region: %s, and Country: %s.",
+					city.getCode(), city.getRegCode(), city.getCountryCode()));
+			return Pages.ADD_CITY;
 		} catch (SQLException e) {
 			System.out.println(e.getMessage());
-			return "cities";
+			return Pages.ADD_CITY;
 		}
+
 	}
 
 	public String search(final SearchQueryOptions options) {
 		this.options = options;
-		System.out.println("Search(options)");
-		return "search_results";
+		return Pages.SEARCH_RESULTS;
 	}
 
 	public SearchQueryOptions getOptions() {

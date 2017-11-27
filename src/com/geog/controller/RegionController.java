@@ -9,18 +9,17 @@ import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
 
 import com.geog.dao.MySQLDao;
-import com.geog.model.Country;
 import com.geog.model.Region;
 import com.geog.util.Pages;
 
 import static com.geog.util.Messages.addMessage;
 import static com.geog.util.Messages.addGlobalMessage;
+import static com.geog.util.Util.anyFalse;
 
 @ApplicationScoped
 @ManagedBean
 public class RegionController {
 	private final MySQLDao db;
-	private Region selected;
 	private List<Region> regions;
 
 	public RegionController() {
@@ -34,28 +33,23 @@ public class RegionController {
 		} catch (SQLException e) {
 			regions = new ArrayList<>();
 		}
-
 	}
 
 	public List<Region> getRegions() {
 		return regions;
 	}
 
-	public void setRegions(List<Region> regions) {
-		this.regions = regions;
-	}
-
-	private boolean hasUniqueCode(Region region) {
+	private boolean hasUniqueCode(final Region region) {
 		return regions.stream().noneMatch(r -> r.getCode().equals(region.getCode()));
 	}
 
 	private boolean countryCodeIsValid(final Region region) {
-		String code = region.getCountryCode();
+		final String code = region.getCountryCode();
 		return !code.isEmpty() && code.length() < 4;
 	}
 
 	private boolean regionCodeIsValid(final Region region) {
-		String regionCode = region.getCode();
+		final String regionCode = region.getCode();
 		return !regionCode.isEmpty() && regionCode.length() < 4;
 	}
 
@@ -80,7 +74,7 @@ public class RegionController {
 			addMessage("regionform:noName", "Name is mandatory.");
 		}
 
-		if (!countryCodeIsValid || !regionCodeIsValid || !regionNameIsValid) {
+		if (anyFalse(countryCodeIsValid, regionCodeIsValid, regionNameIsValid)) {
 			return Pages.ADD_REGION;
 		}
 
