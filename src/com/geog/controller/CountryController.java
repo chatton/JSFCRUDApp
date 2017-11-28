@@ -20,8 +20,6 @@ import static com.geog.util.Util.codeIsValid;
 @ManagedBean
 public class CountryController {
 
-	// select * from city where population > 5000 and co_code = "USA" and
-	// isCoastal=true;
 	private final MySQLDao db;
 	private List<Country> countries;
 	private Country selected;
@@ -77,9 +75,9 @@ public class CountryController {
 	}
 
 	public String add(Country country) {
-		final boolean validName = codeIsValid(country.getName(), 4);
+		final boolean validName = codeIsValid(country.getName());
 		if (!validName) {
-			addMessage("countryform:noName", "Name is mandatory. And must be < 4 characters");
+			addMessage("countryform:noName", "Name is mandatory.");
 		}
 
 		final boolean validCode = codeIsValid(country.getCode(), 4);

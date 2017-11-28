@@ -13,4 +13,6 @@ public class Pages {
 	public static final String REGIONS = "regions";
 	public static final String SEARCH_RESULTS = "search_results";
 	public static final String ADD_CITY = "add_city";
+	public static final String HEADS_OF_STATE = "heads_of_state";
+	public static final String ADD_HEAD_OF_STATE = "add_head_of_state";
 }
