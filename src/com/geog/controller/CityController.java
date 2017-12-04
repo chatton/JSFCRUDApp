@@ -1,26 +1,30 @@
 package com.geog.controller;
 
+import static com.geog.util.Messages.addGlobalMessage;
+import static com.geog.util.Messages.addMessage;
+import static com.geog.util.Util.anyFalse;
+import static com.geog.util.Util.codeIsValid;
+
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 
 import com.geog.dao.MySQLDao;
 import com.geog.finders.CityFinder;
-import com.geog.finders.DatabaseException;
 import com.geog.model.City;
+import com.geog.model.Country;
 import com.geog.model.SearchQueryOptions;
 import com.geog.util.Pages;
-
-import static com.geog.util.Messages.addMessage;
-import static com.geog.util.Messages.addGlobalMessage;
-import static com.geog.util.Util.anyFalse;
-import static com.geog.util.Util.codeIsValid;
-
-@ApplicationScoped
+/*
+ * Controller class in charge of handling interactions
+ * between the SQL database and the view for all things 
+ * City related.
+ */
+@SessionScoped
 @ManagedBean
 public class CityController {
 
@@ -38,6 +42,7 @@ public class CityController {
 			cities = db.getAllCities();
 		} catch (SQLException e) {
 			e.printStackTrace();
+			System.out.println(e.getMessage());
 			cities = new ArrayList<>();
 		}
 	}
@@ -46,9 +51,9 @@ public class CityController {
 		return cities;
 	}
 
-	public String getDetailsFor(City city) {
+	public String getDetailsFor(final City city) {
 		this.selected = city;
-		return "city_details";
+		return Pages.CITY_DETAILS;
 	}
 
 	public City getSelected() {
@@ -111,16 +116,7 @@ public class CityController {
 	}
 
 	public List<City> searchResults() {
-		System.out.println("Searching for results.");
-
-		List<City> cities = new ArrayList<>();
-		try {
-			cities = new CityFinder(db.getConnection()).find(options);
-		} catch (DatabaseException e) {
-			e.printStackTrace();
-		}
-		return cities;
-
+		return new CityFinder(db.getConnection()).find(options);
 	}
 
 }

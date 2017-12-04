@@ -4,7 +4,9 @@ public class Pages {
 	// prevent instantiation
 	private Pages() {
 	}
-
+	/*
+	 * keep the different page names as constants.
+	 */
 	public static final String ADD_COUNTRY = "add_country";
 	public static final String UPDATE_COUNTRY = "update_country";
 	public static final String ADD_REGION = "add_region";
@@ -15,4 +17,5 @@ public class Pages {
 	public static final String ADD_CITY = "add_city";
 	public static final String HEADS_OF_STATE = "heads_of_state";
 	public static final String ADD_HEAD_OF_STATE = "add_head_of_state";
+	public static final String CITY_DETAILS = "city_details";
 }

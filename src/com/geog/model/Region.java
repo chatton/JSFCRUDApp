@@ -2,6 +2,9 @@ package com.geog.model;
 
 import javax.faces.bean.ManagedBean;
 
+/*
+ * Represents a Region from the SQL database.
+ */
 @ManagedBean
 public class Region {
 
@@ -10,9 +13,12 @@ public class Region {
 	private String name;
 	private String description;
 
-	public Region() {
-	}
+	// public no-args constructor for jsf
+	public Region() {}
 
+	/*
+	 * getters and setters for jsf
+	 */
 	public String getCountryCode() {
 		return countryCode;
 	}

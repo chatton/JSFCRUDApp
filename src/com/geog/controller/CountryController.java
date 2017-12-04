@@ -1,28 +1,34 @@
 package com.geog.controller;
 
+import static com.geog.util.Messages.addGlobalMessage;
+import static com.geog.util.Messages.addMessage;
+import static com.geog.util.Util.anyFalse;
+import static com.geog.util.Util.codeIsValid;
+
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 
 import com.geog.dao.MySQLDao;
 import com.geog.model.Country;
 import com.geog.util.Pages;
+import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
 
-import static com.geog.util.Messages.addMessage;
-import static com.geog.util.Messages.addGlobalMessage;
-import static com.geog.util.Util.anyFalse;
-import static com.geog.util.Util.codeIsValid;
-
-@ApplicationScoped
+/*
+ * Controller class in charge of handling interactions
+ * between the SQL database and the view for all things 
+ * Country related.
+ */
+@SessionScoped
 @ManagedBean
 public class CountryController {
 
 	private final MySQLDao db;
 	private List<Country> countries;
-	private Country selected;
+	private Country selected; // hold onto the country in order to update it.
 
 	public CountryController() {
 		db = new MySQLDao();
@@ -32,30 +38,36 @@ public class CountryController {
 
 	public void loadCountries() {
 		try {
-			countries = db.loadAllCountries();
+			countries = db.getAllCountries();
 		} catch (SQLException e) {
-			e.printStackTrace();
-
 			countries = new ArrayList<>();
 		}
 	}
 
-	public String update(Country country) {
+	/*
+	 * saves the selected country so that it can be referenced in the jsf page.
+	 */
+	public String update(final Country country) {
 		selected = country;
 		return Pages.UPDATE_COUNTRY;
 	}
 
-	public String delete(Country country) {
-
+	/*
+	 * deletes the country from the sql db.
+	 */
+	public String delete(final Country country) {
 		try {
 			return db.deleteCountry(country);
 		} catch (SQLException e) {
-			return null;
+			return null; // stays on the same page.
 		}
-
 	}
 
+	/*
+	 * performs the actual update operation in the db.
+	 */
 	public String executeUpdate() {
+
 		if (!codeIsValid(selected.getName())) {
 			// don't perform any db operations with an invalid name.
 			addGlobalMessage("Name must not be empty.");
@@ -70,11 +82,8 @@ public class CountryController {
 
 	}
 
-	private boolean hasUniqueCode(Country country) {
-		return countries.stream().noneMatch(c -> c.getCode().equals(country.getCode()));
-	}
-
 	public String add(Country country) {
+
 		final boolean validName = codeIsValid(country.getName());
 		if (!validName) {
 			addMessage("countryform:noName", "Name is mandatory.");
@@ -85,22 +94,22 @@ public class CountryController {
 			addMessage("countryform:noCode", "Code is mandatory And must be < 4 characters");
 		}
 
+		// don't continue if either of the mandatory fields are not valid.
 		if (anyFalse(validName, validCode)) {
 			return Pages.ADD_COUNTRY;
 		}
 
-		if (!hasUniqueCode(country)) {
-			addGlobalMessage("ERROR: Country Code: " + country.getCode() + " already exists.");
-			return Pages.ADD_COUNTRY; // stay on add country page.
-		}
-
 		try {
 			return db.addCountry(country);
+		} catch (MySQLIntegrityConstraintViolationException e) {
+			addGlobalMessage("ERROR: Country Code: " + country.getCode() + " already exists.");
+			return Pages.ADD_COUNTRY; // stay on add country page.
 		} catch (SQLException e) {
 			return Pages.ADD_COUNTRY;
 		}
 	}
 
+	// JSF bean methods
 	public Country getSelected() {
 		return selected;
 	}

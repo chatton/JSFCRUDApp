@@ -2,15 +2,15 @@ package com.geog.controller;
 
 import static com.geog.util.Messages.addGlobalMessage;
 import static com.geog.util.Messages.addMessage;
-import static com.geog.util.Util.codeIsValid;
 import static com.geog.util.Util.anyFalse;
+import static com.geog.util.Util.codeIsValid;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.faces.bean.ApplicationScoped;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 
 import com.geog.dao.MongoDao;
 import com.geog.dao.MySQLDao;
@@ -18,22 +18,28 @@ import com.geog.model.Country;
 import com.geog.model.HeadOfState;
 import com.geog.util.Pages;
 
-@ApplicationScoped
+/*
+ * Controller class in charge of handling interactions
+ * between the Mongo/SQL database and the view for all things 
+ * HeadsOfState related.
+ */
+@SessionScoped
 @ManagedBean
 public class HeadsOfStateController {
 
+	/*
+	 * has instance of both DAOs in order to check values in both databases.
+	 */
 	private MongoDao mongoDb;
 	private MySQLDao sqlDb;
 	private List<HeadOfState> headsOfState;
 
 	public HeadsOfStateController() {
-		System.out.println("Creating heads of state controller.");
 		mongoDb = new MongoDao();
 		sqlDb = new MySQLDao();
 	}
 
 	public void loadHeadsOfState() {
-		System.out.println("Loading heads of state from MongoDB");
 		this.headsOfState = mongoDb.getHeadsOfState();
 	}
 
@@ -41,16 +47,22 @@ public class HeadsOfStateController {
 		return headsOfState;
 	}
 
+	/*
+	 * returns true if a country with the provided country code already exists.
+	 */
 	private boolean countryCodeExists(final String countryCode, final List<Country> countries) {
 		return countries.stream().anyMatch(country -> country.getCode().equals(countryCode));
 	}
 
+	/*
+	 * returns true if the country already has a head of state.
+	 */
 	private boolean countryAlreadyHasHeadOfState(final String countryCode, final List<HeadOfState> hos) {
 		return hos.stream().anyMatch(h -> h.get_id().equals(countryCode));
 	}
 
 	public String add(final HeadOfState hos) {
-		final String countryCode = hos.get_id();
+		final String countryCode = hos.get_id(); // the id is the country code. e.g. "USA"
 		final boolean countryCodeIsValid = codeIsValid(countryCode, 4);
 		if (!countryCodeIsValid) {
 			addMessage("headofstateform:noCode",
@@ -67,13 +79,15 @@ public class HeadsOfStateController {
 
 		List<Country> countries = new ArrayList<>();
 		try {
-			countries = sqlDb.loadAllCountries();
+			countries = sqlDb.getAllCountries();
 		} catch (SQLException e) {
 			addGlobalMessage("Error connecting to SQL data base.");
-			System.out.println(e.getMessage());
 			return Pages.ADD_HEAD_OF_STATE;
 		}
 
+		/*
+		 * check the SQL database to see if the country code exists.
+		 */
 		if (!countryCodeExists(countryCode, countries)) {
 			addGlobalMessage("Country: " + countryCode + " does not exist.");
 			return Pages.ADD_HEAD_OF_STATE;
@@ -84,6 +98,7 @@ public class HeadsOfStateController {
 			return Pages.ADD_HEAD_OF_STATE;
 		}
 
+		// add the head of state if everything is valid across databases.
 		return mongoDb.add(hos);
 	}
 

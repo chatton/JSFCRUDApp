@@ -2,6 +2,9 @@ package com.geog.model;
 
 import javax.faces.bean.ManagedBean;
 
+/*
+ * City class is a managed bean that represents a City from the SQL database
+ */
 @ManagedBean
 public class City {
 
@@ -13,8 +16,20 @@ public class City {
 	private boolean isCoastal;
 	private double areaKm;
 	
-	public City() {}
+	
+	// country name is a variable to store the data taken from the Country SQL table.
+	private String countryName ="";
+	
+	// used to display the region name in the search page.
+	private String regionName = "";
 
+	// public no-args constructor for JSF to be able to construct instances.
+	public City() {
+	}
+
+	/*
+	 * getters and setters for JSF to be able to manipulate and access the fields.
+	 */
 	public String getCode() {
 		return code;
 	}
@@ -70,7 +85,21 @@ public class City {
 	public void setAreaKm(double areaKm) {
 		this.areaKm = areaKm;
 	}
+
+	public void setCountryName(String name) {
+		this.countryName = name;
+	}
+
+	public String getCountryName() {
+		return countryName;
+	}
+
+	public void setRegionName(String name) {
+		this.regionName = name;
+	}
 	
-	
-	
+	public String getRegionName() {
+		return this.regionName;
+	}
+
 }

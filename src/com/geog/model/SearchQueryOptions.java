@@ -2,7 +2,12 @@ package com.geog.model;
 
 import javax.faces.bean.ManagedBean;
 
-@ManagedBean(name = "search")
+/*
+ * managed bean to represent the search options
+ * when finding a city. These are required to construct
+ * the SQL query and return the result set.
+ */
+@ManagedBean(name = "search") // call it "search" in the jsf fields
 public class SearchQueryOptions {
 
 	private String lessThanOrGreater;
@@ -10,6 +15,9 @@ public class SearchQueryOptions {
 	private boolean isCoastal;
 	private String countryCode;
 
+	// public no-args for jsf
+	public SearchQueryOptions() {}
+	
 	public String getLessThanOrGreater() {
 		return lessThanOrGreater;
 	}
@@ -39,7 +47,7 @@ public class SearchQueryOptions {
 	}
 
 	public void setCountryCode(String countryCode) {
-		this.countryCode = countryCode;
+		this.countryCode = countryCode.trim();
 	}
 
 }
