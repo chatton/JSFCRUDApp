@@ -6,22 +6,28 @@
 <h:head>
 	<title>Add country</title>
 </h:head>
+
 <h:body>
-	<h:messages globalOnly="true"/>
+	<h:messages globalOnly="true" style="color:red" />
 	<h2>Country Details</h2>
 	<h:form id="countryform">
-	    Country Code: <h:inputText value="#{country.code}" />
-	    <h:message class="error" for="noCode" id="noCode" />
-	    <br/> 
-	    Country Name: <h:inputText value="#{country.name}" /> 
-	    <h:message class="error" for="noName" id="noName" />
-	    <br/>
+	    Country Code: <h:inputText value="#{country.code}" required="true"
+			label="Country Code" id="noCode">
+		</h:inputText>
+		<h:message class="error" for="noCode" style="color:red" />
+		<br /> 
+	    Country Name: <h:inputText value="#{country.name}" id="noName">
+
+		</h:inputText>
+		<h:message class="error" for="noName" style="color:red" />
+		<br />
 		Country Details: <h:inputText value="#{country.details}" />
-		<br/>
+		<br />
 		<h:commandButton value="Add"
 			action="#{countryController.add(country)}"></h:commandButton>
 	</h:form>
-
+	<h:link value="home" outcome="index" />
+	<br/>
 	<h:link value="back" outcome="countries" />
 
 </h:body>

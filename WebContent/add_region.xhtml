@@ -8,17 +8,18 @@
 </h:head>
 
 <h:body>
-	<h:messages globalOnly="true" />
+	<h:messages globalOnly="true" style="color:red" />
 	<h2>Add Region</h2>
 	<h:form id="regionform">
 	    Country Code: <h:inputText value="#{region.countryCode}" />
-		<h:message class="error" for="noCountryCode" id="noCountryCode" />
+		<h:message class="error" for="noCountryCode" id="noCountryCode"
+			style="color:red" />
 		<br />
 	    Region Code: <h:inputText value="#{region.code}" />
-		<h:message class="error" for="noCode" id="noCode" />
+		<h:message class="error" for="noCode" id="noCode" style="color:red" />
 		<br />
 		Name: <h:inputText value="#{region.name}" />
-		<h:message class="error" for="noName" id="noName" />
+		<h:message class="error" for="noName" id="noName" style="color:red" />
 		<br />
 		Description: <h:inputText value="#{region.description}" />
 		<br />

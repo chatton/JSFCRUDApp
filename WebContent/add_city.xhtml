@@ -8,20 +8,20 @@
 </h:head>
 
 <h:body>
-	<h:messages globalOnly="true" />
+	<h:messages globalOnly="true" style="color:red;"/>
 	<h2>Add City</h2>
 	<h:form id="cityform">
 	    City Code: <h:inputText value="#{city.code}" />
-		<h:message class="error" for="noCityCode" id="noCityCode" />
+		<h:message class="error" for="noCityCode" id="noCityCode" style="color:red;" />
 		<br />
 	    Country Code: <h:inputText value="#{city.countryCode}" />
-		<h:message class="error" for="noCountryCode" id="noCountryCode" />
+		<h:message class="error" for="noCountryCode" id="noCountryCode" style="color:red;" />
 		<br />
 	    Region Code: <h:inputText value="#{city.regCode}" />
-		<h:message class="error" for="noRegCode" id="noRegCode" />
+		<h:message class="error" for="noRegCode" id="noRegCode" style="color:red;" />
 		<br />
 	    Name: <h:inputText value="#{city.name}" />
-		<h:message class="error" for="noName" id="noName" />
+		<h:message class="error" for="noName" id="noName" style="color:red;"/>
 		<br />
 	    Population: <h:inputText value="#{city.population}" />
 		<br />

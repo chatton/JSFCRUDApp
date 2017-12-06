@@ -48,7 +48,7 @@ public class CityFinder implements Finder<City> {
 
 			final StringBuilder sb = new StringBuilder();
 			sb.append("SELECT * FROM CITY INNER JOIN COUNTRY ON COUNTRY.CO_CODE = CITY.CO_CODE INNER JOIN REGION ON CITY.REG_CODE = REGION.REG_CODE WHERE ");
-			if (population != 0) {
+			if (population != 0) { // ignore population filter if it's 0 - the user doesn't care about population.
 				sb.append("POPULATION " + lessOrGreaterThan + " ? AND ");
 			}
 			sb.append("CITY.CO_CODE LIKE ? AND ISCOASTAL LIKE ?");

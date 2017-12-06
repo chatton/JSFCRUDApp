@@ -8,8 +8,11 @@
 </h:head>
 
 <h:body>
+	<h:outputStylesheet library="css" name="tables.css" />
 	<h:button outcome="add_city.xhtml" value="Add City"></h:button>
-	<h:dataTable value="#{cityController.cities}" var="city" border="2">
+	<h:dataTable value="#{cityController.cities}" var="city" border="2"
+		styleClass="table" headerClass="table-header"
+		rowClasses="table-odd-row,table-even-row">
 		<f:metadata>
 			<f:event type="preRenderView"
 				listener="#{cityController.loadCities()}" />

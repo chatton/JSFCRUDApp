@@ -16,7 +16,6 @@ import javax.faces.bean.SessionScoped;
 import com.geog.dao.MySQLDao;
 import com.geog.finders.CityFinder;
 import com.geog.model.City;
-import com.geog.model.Country;
 import com.geog.model.SearchQueryOptions;
 import com.geog.util.Pages;
 /*

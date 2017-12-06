@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:h="http://java.sun.com/jsf/html">
+
+<h:head>
+	<title>Add Head of State</title>
+</h:head>
+<h:body>
+	<h:messages globalOnly="true"/>
+	<h2>Add Head of State</h2>
+	<h:form id="headofstateform">
+	    Country Code: <h:inputText value="#{headOfState._id}" />
+	    <h:message class="error" for="noCode" id="noCode" />
+	    <br/> 
+	    Head of State: <h:inputText value="#{headOfState.headOfState}" /> 
+	    <h:message class="error" for="noHos" id="noHos" />
+	    <br/>
+		<h:commandButton value="Add"
+			action="#{headsOfStateController.add(headOfState)}"></h:commandButton>
+	</h:form>
+
+	<h:link value="back" outcome="heads_of_state" />
+
+</h:body>
+</html>

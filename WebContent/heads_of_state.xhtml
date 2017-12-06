@@ -3,39 +3,39 @@
 	xmlns:f="http://java.sun.com/jsf/core"
 	xmlns:h="http://java.sun.com/jsf/html">
 
-
-
 <h:head>
-	<title>Regions</title>
+	<title>Heads of State</title>
 </h:head>
 
 <h:body>
 	<h:outputStylesheet library="css" name="tables.css" />
-	<h:button outcome="add_region.xhtml" value="Add Region"></h:button>
-	<h:dataTable value="#{regionController.regions}" var="region"
+	<h:button outcome="add_head_of_state.xhtml" value="Add Head of State"></h:button>
+
+	<h:dataTable value="#{headsOfStateController.headsOfState}" var="hos"
 		border="2" styleClass="table" headerClass="table-header"
 		rowClasses="table-odd-row,table-even-row">
 		<f:metadata>
 			<f:event type="preRenderView"
-				listener="#{regionController.loadRegions()}" />
+				listener="#{headsOfStateController.loadHeadsOfState()}" />
 		</f:metadata>
 		<h:column>
 			<f:facet name="header">Country Code</f:facet>
-         #{region.countryCode}
+         #{hos._id}
       </h:column>
 		<h:column>
-			<f:facet name="header">Region Code</f:facet>
-         #{region.code}
+			<f:facet name="header">Head of State</f:facet>
+         #{hos.headOfState}
       </h:column>
+
 		<h:column>
-			<f:facet name="header">Region Name</f:facet>
-         #{region.name}
-      </h:column>
-		<h:column>
-			<f:facet name="header">Region Details</f:facet>
-         #{region.description}
-      </h:column>
+			<h:form>
+				<h:commandLink value="Delete"
+					action="#{headsOfStateController.delete(hos)}" />
+			</h:form>
+		</h:column>
+
 	</h:dataTable>
+
 	<h:link value="home" outcome="index" />
 </h:body>
 </html>
