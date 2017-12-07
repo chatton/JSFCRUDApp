@@ -13,6 +13,8 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
 import com.geog.dao.MySQLDao;
+import com.geog.dao.NullSQLDao;
+import com.geog.dao.SqlDAO;
 import com.geog.model.Country;
 import com.geog.util.Pages;
 import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException;
@@ -26,12 +28,17 @@ import com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationExceptio
 @ManagedBean
 public class CountryController {
 
-	private final MySQLDao db;
+	private SqlDAO db;
 	private List<Country> countries;
 	private Country selected; // hold onto the country in order to update it.
 
 	public CountryController() {
-		db = new MySQLDao();
+		try {
+			db = new MySQLDao();
+		} catch (SQLException e) {
+			db = new NullSQLDao();
+			addGlobalMessage("Error connecting to SQL database.");
+		}
 		countries = new ArrayList<>();
 		selected = new Country();
 	}
@@ -40,6 +47,7 @@ public class CountryController {
 		try {
 			countries = db.getAllCountries();
 		} catch (SQLException e) {
+			
 			countries = new ArrayList<>();
 		}
 	}
@@ -59,7 +67,8 @@ public class CountryController {
 		try {
 			return db.deleteCountry(country);
 		} catch (SQLException e) {
-			return null; // stays on the same page.
+			addGlobalMessage("Error deleting country: " + country.getName()); // stays on the same page.
+			return null;
 		}
 	}
 

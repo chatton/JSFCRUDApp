@@ -11,7 +11,7 @@
 	<h:messages globalOnly="true" style="color:red" />
 	<h2>Country Details</h2>
 	<h:form id="countryform">
-	    Country Code: <h:inputText value="#{country.code}" required="true"
+	    Country Code: <h:inputText value="#{country.code}"
 			label="Country Code" id="noCode">
 		</h:inputText>
 		<h:message class="error" for="noCode" style="color:red" />
@@ -27,7 +27,7 @@
 			action="#{countryController.add(country)}"></h:commandButton>
 	</h:form>
 	<h:link value="home" outcome="index" />
-	<br/>
+	<br />
 	<h:link value="back" outcome="countries" />
 
 </h:body>

@@ -24,12 +24,16 @@ import com.geog.util.Pages;
 @SessionScoped
 @ManagedBean
 public class RegionController {
-	private final MySQLDao db;
+	private MySQLDao db;
 	private List<Region> regions;
 
 	public RegionController() {
 		this.regions = new ArrayList<>();
-		this.db = new MySQLDao();
+		try {
+			this.db = new MySQLDao();
+		} catch (SQLException e) {
+			addGlobalMessage("Error connecting to SQL database.");
+		}
 	}
 
 	public void loadRegions() {

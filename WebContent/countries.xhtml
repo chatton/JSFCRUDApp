@@ -8,11 +8,13 @@
 </h:head>
 
 <h:body>
-	<h:outputStylesheet library="css" name="tables.css"/>
+	<h:messages globalOnly="true" style="color:red" />
+	<h:outputStylesheet library="css" name="tables.css" />
 	<h:button outcome="add_country.xhtml" value="Add Country"></h:button>
 	<h2>Country Details</h2>
 	<h:dataTable value="#{countryController.countries}" var="country"
-		border="2" styleClass="table" headerClass="table-header" rowClasses="table-odd-row,table-even-row">
+		border="2" styleClass="table" headerClass="table-header"
+		rowClasses="table-odd-row,table-even-row">
 		<f:metadata>
 			<f:event type="preRenderView"
 				listener="#{countryController.loadCountries()}" />

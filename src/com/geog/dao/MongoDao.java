@@ -36,7 +36,7 @@ public class MongoDao {
 		final Gson gson = new Gson();
 		final List<HeadOfState> headsOfState = new ArrayList<>();
 		for (Document doc : hos) { // looking at every document
-			HeadOfState h = gson.fromJson(doc.toJson(), HeadOfState.class); // conert it into a HeadOfState object
+			HeadOfState h = gson.fromJson(doc.toJson(), HeadOfState.class); // convert it into a HeadOfState object
 			headsOfState.add(h);
 		}
 		return headsOfState;

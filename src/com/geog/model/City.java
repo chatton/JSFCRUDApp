@@ -16,7 +16,6 @@ public class City {
 	private boolean isCoastal;
 	private double areaKm;
 	
-	
 	// country name is a variable to store the data taken from the Country SQL table.
 	private String countryName ="";
 	

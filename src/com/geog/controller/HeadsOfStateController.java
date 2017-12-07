@@ -36,7 +36,11 @@ public class HeadsOfStateController {
 
 	public HeadsOfStateController() {
 		mongoDb = new MongoDao();
-		sqlDb = new MySQLDao();
+		try {
+			sqlDb = new MySQLDao();
+		} catch (SQLException e) {
+			addGlobalMessage("Error connecting to SQL database.");
+		}
 	}
 
 	public void loadHeadsOfState() {

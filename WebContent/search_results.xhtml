@@ -17,19 +17,20 @@
          #{city.code}
       </h:column>
 		<h:column>
-			<f:facet name="header">Country Name</f:facet>
+			<f:facet name="header">City Name</f:facet>
+         #{city.name}
+      </h:column>
+		<h:column>
+			<f:facet name="header">Country</f:facet>
          #{city.countryName}
       </h:column>
 		<h:column>
 			<f:facet name="header">Region</f:facet>
          #{city.regionName}
       </h:column>
+
 		<h:column>
-			<f:facet name="header">City Name</f:facet>
-         #{city.name}
-      </h:column>
-		<h:column>
-			<f:facet name="header">Population</f:facet>
+			<f:facet name="header">City Population</f:facet>
          #{city.population}
       </h:column>
 		<h:column>
@@ -42,5 +43,7 @@
       </h:column>
 	</h:dataTable>
 	<h:link value="home" outcome="index" />
+	<br />
+	<h:link value="search" outcome="find_cities" />
 </h:body>
 </html>

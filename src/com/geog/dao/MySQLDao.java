@@ -10,6 +10,7 @@ import java.util.List;
 
 import javax.naming.Context;
 import javax.naming.InitialContext;
+import javax.naming.NamingException;
 import javax.sql.DataSource;
 
 import com.geog.model.City;
@@ -20,11 +21,11 @@ import com.geog.util.Pages;
 /*
  * MySql Data base access object, provides access to the SQL database.
  */
-public class MySQLDao {
+public class MySQLDao implements SqlDAO {
 
 	private Connection connection; // the actual DB connection.
 
-	public MySQLDao() {
+	public MySQLDao() throws SQLException {
 		connect(); // perform the initial connection.
 	}
 
@@ -68,8 +69,10 @@ public class MySQLDao {
 	 */
 	public List<City> getAllCities() throws SQLException {
 		final Statement stmt = connection.createStatement();
-//		final String queryString = "SELECT * FROM CITY";
-		final ResultSet rs = stmt.executeQuery("SELECT * FROM CITY INNER JOIN COUNTRY ON COUNTRY.CO_CODE = CITY.CO_CODE INNER JOIN REGION ON REGION.REG_CODE = CITY.REG_CODE");
+		final ResultSet rs = stmt.executeQuery(
+				"SELECT * FROM CITY INNER JOIN COUNTRY ON COUNTRY.CO_CODE = CITY.CO_CODE INNER JOIN REGION ON REGION.REG_CODE = CITY.REG_CODE");
+		
+		
 		final List<City> cities = new ArrayList<>();
 		while (rs.next()) {
 			final City city = new City();
@@ -106,14 +109,13 @@ public class MySQLDao {
 	/*
 	 * create a connection from the connection pool based on the configuration file.
 	 */
-	private void connect() {
+	private void connect() throws SQLException {
 		try {
 			Context context = new InitialContext();
 			String jndiName = "java:comp/env/jdbc/geography";
 			DataSource mysqlDS = (DataSource) context.lookup(jndiName);
 			connection = mysqlDS.getConnection();
-		} catch (Exception e) {
-			System.out.println(e.getMessage());
+		} catch (NamingException e) {
 			e.printStackTrace();
 		}
 	}
@@ -175,3 +177,28 @@ public class MySQLDao {
 		return Pages.REGIONS;
 	}
 }
+
+
+//mysql> SELECT * FROM CITY INNER JOIN REGION ON CITY.REG_CODE = REGION.REG_CODE INNER JOIN COUNTRY ON COUNTRY.CO_CODE = REGION.CO_CODE;
+//+----------+---------+----------+----------------+------------+-----------+---------+---------+----------+------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------+--------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+//| cty_code | co_code | reg_code | cty_name       | population | isCoastal | areaKM  | co_code | reg_code | reg_name         | reg_desc                                                                                                                                                                                                            | co_code | co_name                  | co_details                                                                                                                                                                                                                            |
+//+----------+---------+----------+----------------+------------+-----------+---------+---------+----------+------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------+--------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+//| GC       | GIB     | GR       | Gibberish City |     100000 | false     |  500.00 | GIB     | GR       | Gibberish Region | It's a gibberish region                                                                                                                                                                                             | GIB     | A Gibberish Name         | It's a REALLY gibberish country - updated                                                                                                                                                                                             |
+//| DUB      | IRL     | DUB      | Dublin         |     553165 | true      |  114.99 | IRL     | DUB      | Co. Dublin       | County Dublin is the most populous county in Ireland. It is divided into four administrative areas: Dublin city, Dun Laoghaire?Rathdown, Fingal and South Dublin.                                                   | IRL     | Republic of Ireland      | Ireland also described as the Republic of Ireland (Poblacht na h…ireann), is a sovereign state in north-western Europe occupying 26 of 32 counties of the island of Ireland.                                                          |
+//| SWO      | IRL     | DUB      | Swords         |      68683 | true      |   11.35 | IRL     | DUB      | Co. Dublin       | County Dublin is the most populous county in Ireland. It is divided into four administrative areas: Dublin city, Dun Laoghaire?Rathdown, Fingal and South Dublin.                                                   | IRL     | Republic of Ireland      | Ireland also described as the Republic of Ireland (Poblacht na h…ireann), is a sovereign state in north-western Europe occupying 26 of 32 counties of the island of Ireland.                                                          |
+//| GAL      | IRL     | GAL      | Galway         |      79934 | true      |   53.35 | IRL     | GAL      | Co. Galway       | County Galway is a county in the West of Ireland. It is part of the province of Connacht. There are several Irish-speaking areas in the west of the county.                                                         | IRL     | Republic of Ireland      | Ireland also described as the Republic of Ireland (Poblacht na h…ireann), is a sovereign state in north-western Europe occupying 26 of 32 counties of the island of Ireland.                                                          |
+//| GOR      | IRL     | GAL      | Gort           |       2644 | false     |   19.91 | IRL     | GAL      | Co. Galway       | County Galway is a county in the West of Ireland. It is part of the province of Connacht. There are several Irish-speaking areas in the west of the county.                                                         | IRL     | Republic of Ireland      | Ireland also described as the Republic of Ireland (Poblacht na h…ireann), is a sovereign state in north-western Europe occupying 26 of 32 counties of the island of Ireland.                                                          |
+//| LOU      | IRL     | GAL      | Loughrea       |       5057 | false     |   25.35 | IRL     | GAL      | Co. Galway       | County Galway is a county in the West of Ireland. It is part of the province of Connacht. There are several Irish-speaking areas in the west of the county.                                                         | IRL     | Republic of Ireland      | Ireland also described as the Republic of Ireland (Poblacht na h…ireann), is a sovereign state in north-western Europe occupying 26 of 32 counties of the island of Ireland.                                                          |
+//| ATH      | IRL     | WMH      | Athlone        |      21349 | false     |   30.00 | IRL     | WMH      | Co. Westmeath    | County Westmeath is a county in the province of Leinster. It originally formed part of the historic Kingdom of Meath.                                                                                               | IRL     | Republic of Ireland      | Ireland also described as the Republic of Ireland (Poblacht na h…ireann), is a sovereign state in north-western Europe occupying 26 of 32 counties of the island of Ireland.                                                          |
+//| MUL      | IRL     | WMH      | Mullingar      |      20928 | false     |   28.23 | IRL     | WMH      | Co. Westmeath    | County Westmeath is a county in the province of Leinster. It originally formed part of the historic Kingdom of Meath.                                                                                               | IRL     | Republic of Ireland      | Ireland also described as the Republic of Ireland (Poblacht na h…ireann), is a sovereign state in north-western Europe occupying 26 of 32 counties of the island of Ireland.                                                          |
+//| MAR      | UK      | KNT      | Margate        |      61223 | true      |   23.40 | UK      | KNT      | Kent             | Kent is a county in South East England and one of the home counties. It borders Greater London to the north west, Surrey to the west and East Sussex to the south west.                                             | UK      | United Kingdom           | The United Kingdom of Great Britain and Northern Ireland, commonly known as the United Kingdom (UK) or Britain, is a sovereign country in western Europe.                                                                             |
+//| SAN      | UK      | KNT      | Sandwich       |       4985 | false     |   13.00 | UK      | KNT      | Kent             | Kent is a county in South East England and one of the home counties. It borders Greater London to the north west, Surrey to the west and East Sussex to the south west.                                             | UK      | United Kingdom           | The United Kingdom of Great Britain and Northern Ireland, commonly known as the United Kingdom (UK) or Britain, is a sovereign country in western Europe.                                                                             |
+//| LON      | UK      | LON      | London         |    8673713 | false     | 1572.00 | UK      | LON      | London           | London is the capital and most populous city of England and the United Kingdom.Standing on the River Thames in the south east of the island of Great Britain, London has been a major settlement for two millennia. | UK      | United Kingdom           | The United Kingdom of Great Britain and Northern Ireland, commonly known as the United Kingdom (UK) or Britain, is a sovereign country in western Europe.                                                                             |
+//| hhh      | USA     | 124      | 123            |          0 | false     |    0.00 | USA     | 124      | USA 2            |                                                                                                                                                                                                                     | USA     | United States of America | The United States of America , commonly known as the United States (U.S.) or America, is a constitutional federal republic composed of 50 states, a federal district, five major self-governing territories, and various possessions. |
+//| ALB      | USA     | NYK      | Albany         |      98469 | false     |   56.20 | USA     | NYK      | New York         | New York is a state in the northeastern United States. New York was one of the original thirteen colonies that formed the United States.                                                                            | USA     | United States of America | The United States of America , commonly known as the United States (U.S.) or America, is a constitutional federal republic composed of 50 states, a federal district, five major self-governing territories, and various possessions. |
+//| CTY      | USA     | NYK      | A new new york |      50000 | false     |   25.65 | USA     | NYK      | New York         | New York is a state in the northeastern United States. New York was one of the original thirteen colonies that formed the United States.                                                                            | USA     | United States of America | The United States of America , commonly known as the United States (U.S.) or America, is a constitutional federal republic composed of 50 states, a federal district, five major self-governing territories, and various possessions. |
+//| GVL      | USA     | NYK      | Greenville     |       3739 | false     |   39.10 | USA     | NYK      | New York         | New York is a state in the northeastern United States. New York was one of the original thirteen colonies that formed the United States.                                                                            | USA     | United States of America | The United States of America , commonly known as the United States (U.S.) or America, is a constitutional federal republic composed of 50 states, a federal district, five major self-governing territories, and various possessions. |
+//| NY2      | USA     | NYK      | New York 2     |       1000 | false     |   50.00 | USA     | NYK      | New York         | New York is a state in the northeastern United States. New York was one of the original thirteen colonies that formed the United States.                                                                            | USA     | United States of America | The United States of America , commonly known as the United States (U.S.) or America, is a constitutional federal republic composed of 50 states, a federal district, five major self-governing territories, and various possessions. |
+//| NYK      | USA     | NYK      | New York       |    8537673 | true      |  468.48 | USA     | NYK      | New York         | New York is a state in the northeastern United States. New York was one of the original thirteen colonies that formed the United States.                                                                            | USA     | United States of America | The United States of America , commonly known as the United States (U.S.) or America, is a constitutional federal republic composed of 50 states, a federal district, five major self-governing territories, and various possessions. |
+//+----------+---------+----------+----------------+------------+-----------+---------+---------+----------+------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+---------+--------------------------+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------+
+//17 rows in set (0.00 sec)

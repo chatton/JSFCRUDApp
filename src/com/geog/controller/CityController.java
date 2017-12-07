@@ -5,6 +5,7 @@ import static com.geog.util.Messages.addMessage;
 import static com.geog.util.Util.anyFalse;
 import static com.geog.util.Util.codeIsValid;
 
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.SQLIntegrityConstraintViolationException;
 import java.util.ArrayList;
@@ -14,10 +15,13 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 
 import com.geog.dao.MySQLDao;
+import com.geog.dao.NullSQLDao;
+import com.geog.dao.SqlDAO;
 import com.geog.finders.CityFinder;
 import com.geog.model.City;
 import com.geog.model.SearchQueryOptions;
 import com.geog.util.Pages;
+
 /*
  * Controller class in charge of handling interactions
  * between the SQL database and the view for all things 
@@ -27,13 +31,18 @@ import com.geog.util.Pages;
 @ManagedBean
 public class CityController {
 
-	private final MySQLDao db;
+	private SqlDAO db;
 	private City selected;
 	private List<City> cities;
 	private SearchQueryOptions options;
 
 	public CityController() {
-		this.db = new MySQLDao();
+		try {
+			this.db = new MySQLDao();
+		} catch (SQLException e) {
+			this.db = new NullSQLDao();
+			addGlobalMessage("Error connecting to SQL database.");
+		}
 	}
 
 	public void loadCities() {
@@ -115,7 +124,13 @@ public class CityController {
 	}
 
 	public List<City> searchResults() {
-		return new CityFinder(db.getConnection()).find(options);
+		Connection conn = db.getConnection();
+		if(conn != null) {
+			return new CityFinder(db.getConnection()).find(options);
+		} else {
+			return new ArrayList<>();
+		}
+		
 	}
 
 }

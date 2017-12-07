@@ -15,10 +15,12 @@
 	<h:dataTable value="#{regionController.regions}" var="region"
 		border="2" styleClass="table" headerClass="table-header"
 		rowClasses="table-odd-row,table-even-row">
+		
 		<f:metadata>
 			<f:event type="preRenderView"
 				listener="#{regionController.loadRegions()}" />
 		</f:metadata>
+		
 		<h:column>
 			<f:facet name="header">Country Code</f:facet>
          #{region.countryCode}
